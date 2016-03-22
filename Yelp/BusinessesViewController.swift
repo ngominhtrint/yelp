@@ -61,7 +61,7 @@ class BusinessesViewController: UIViewController {
         print("Category \(filterData!.category)\n========\n")
         
         Business.searchWithTerm(searchContent, sort: filterData!.sortBy, categories: filterData!.category,
-            deals: filterData!.offerDeal, completion: { (businesses: [Business]!, error: NSError!) -> Void in
+            deals: filterData!.offerDeal, distance: filterData!.distance, completion: { (businesses: [Business]!, error: NSError!) -> Void in
 
                 if (businesses != nil){
                     self.businesses = businesses
@@ -133,9 +133,9 @@ extension BusinessesViewController: UITableViewDataSource, UITableViewDelegate{
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("RestaurantCell", forIndexPath: indexPath) as! RestaurantCell
-        
+        cell.selectionStyle = .None
         let business = businesses[indexPath.row]
-        
+
         cell.rateImageView.setImageWithURL(business.ratingImageURL!)
         cell.restaurantImageView.setImageWithURL(business.imageURL!)
         cell.restaurantNameLabel.text = business.name
@@ -151,7 +151,6 @@ extension BusinessesViewController: UITableViewDataSource, UITableViewDelegate{
 // Back from FiltersViewController
 extension BusinessesViewController: FiltersViewControllerDelegate{
     func filterViewController(filtersViewController: FiltersViewController, didUpdateFilters filter: Filter) {
-        
         self.filterData = filter
         doSearch()
     }

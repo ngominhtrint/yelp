@@ -216,23 +216,20 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0iO-hn-vaq" customClass="CheckBox" customModule="Yelp" customModuleProvider="target">
-                                                    <rect key="frame" x="280" y="11" width="16" height="22"/>
-                                                    <connections>
-                                                        <action selector="onChecked:" destination="voY-Rh-QgA" eventType="touchUpInside" id="uto-dB-Reg"/>
-                                                    </connections>
-                                                </button>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bW0-s6-vIe">
+                                                    <rect key="frame" x="247" y="6" width="51" height="31"/>
+                                                </switch>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="bW0-s6-vIe" secondAttribute="trailing" constant="8" id="52w-0l-TcJ"/>
                                                 <constraint firstItem="cmh-Gk-W3D" firstAttribute="leading" secondItem="Nqo-9M-ed3" secondAttribute="leading" constant="8" id="9QE-RV-Rrv"/>
-                                                <constraint firstItem="cmh-Gk-W3D" firstAttribute="centerY" secondItem="Nqo-9M-ed3" secondAttribute="centerY" id="Dvb-c9-vZK"/>
-                                                <constraint firstItem="0iO-hn-vaq" firstAttribute="centerY" secondItem="Nqo-9M-ed3" secondAttribute="centerY" id="Qc9-RC-dwM"/>
-                                                <constraint firstAttribute="trailing" secondItem="0iO-hn-vaq" secondAttribute="trailing" constant="8" id="cck-1Y-Pav"/>
+                                                <constraint firstItem="bW0-s6-vIe" firstAttribute="centerY" secondItem="Nqo-9M-ed3" secondAttribute="centerY" id="igs-Tk-Wh8"/>
+                                                <constraint firstItem="cmh-Gk-W3D" firstAttribute="centerY" secondItem="Nqo-9M-ed3" secondAttribute="centerY" id="jTr-Ld-I1f"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="checkBox" destination="0iO-hn-vaq" id="r0Y-Jp-Yb0"/>
                                             <outlet property="distanceLabel" destination="cmh-Gk-W3D" id="f8d-fI-WJD"/>
+                                            <outlet property="distanceSwitch" destination="bW0-s6-vIe" id="KU3-wY-lky"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="HeaderCell" id="FCc-c0-odb">
@@ -245,11 +242,69 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Header" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="twd-YV-obL">
                                                     <rect key="frame" x="8" y="11" width="56" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SortByCell" id="W5x-xh-c4L" customClass="SortByCell" customModule="Yelp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="248.5" width="304" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="W5x-xh-c4L" id="45T-0R-64N">
+                                            <rect key="frame" x="0.0" y="0.0" width="304" height="44.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sort By" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="veY-42-5Vx">
+                                                    <rect key="frame" x="8" y="11" width="57" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UbO-5v-BDR">
+                                                    <rect key="frame" x="247" y="6" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="veY-42-5Vx" firstAttribute="leading" secondItem="45T-0R-64N" secondAttribute="leading" constant="8" id="0W4-S7-6Ja"/>
+                                                <constraint firstAttribute="trailing" secondItem="UbO-5v-BDR" secondAttribute="trailing" constant="8" id="XqK-rY-Sde"/>
+                                                <constraint firstItem="UbO-5v-BDR" firstAttribute="centerY" secondItem="45T-0R-64N" secondAttribute="centerY" id="ktI-3p-jFE"/>
+                                                <constraint firstItem="veY-42-5Vx" firstAttribute="centerY" secondItem="45T-0R-64N" secondAttribute="centerY" id="zli-Ot-EZS"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="sortByLabel" destination="veY-42-5Vx" id="QAC-eE-Ch1"/>
+                                            <outlet property="sortBySwitch" destination="UbO-5v-BDR" id="PtO-Zo-VCM"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CategoryCell" id="9Mn-Ss-Vax" customClass="CategoryCell" customModule="Yelp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="293.5" width="304" height="45"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9Mn-Ss-Vax" id="wAA-CH-5oB">
+                                            <rect key="frame" x="0.0" y="0.0" width="304" height="44.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Categories" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sPI-On-xV9">
+                                                    <rect key="frame" x="8" y="11" width="84" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Bh-dF-aPR">
+                                                    <rect key="frame" x="247" y="6" width="51" height="31"/>
+                                                </switch>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="sPI-On-xV9" firstAttribute="leading" secondItem="wAA-CH-5oB" secondAttribute="leading" constant="8" id="AXo-cj-6Hx"/>
+                                                <constraint firstItem="7Bh-dF-aPR" firstAttribute="centerY" secondItem="wAA-CH-5oB" secondAttribute="centerY" id="JPE-jq-w7V"/>
+                                                <constraint firstItem="sPI-On-xV9" firstAttribute="centerY" secondItem="wAA-CH-5oB" secondAttribute="centerY" id="SsQ-vd-4IO"/>
+                                                <constraint firstAttribute="trailing" secondItem="7Bh-dF-aPR" secondAttribute="trailing" constant="8" id="snD-fD-aVr"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="categoryLabel" destination="sPI-On-xV9" id="tAe-Tf-Gw2"/>
+                                            <outlet property="categorySwitch" destination="7Bh-dF-aPR" id="bNW-Z2-ew2"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>

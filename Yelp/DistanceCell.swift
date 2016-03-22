@@ -16,12 +16,14 @@ class DistanceCell: UITableViewCell {
     
     weak var delegate: DistanceCellDelegate?
 
+    @IBOutlet weak var distanceSwitch: UISwitch!
     @IBOutlet weak var distanceLabel: UILabel!
-    @IBOutlet weak var checkBox: CheckBox!
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        
+        distanceSwitch.addTarget(self, action: "switchValueChanged", forControlEvents: UIControlEvents.ValueChanged)
     }
 
     override func setSelected(selected: Bool, animated: Bool) {
@@ -29,9 +31,9 @@ class DistanceCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
-
-    @IBAction func onChecked(sender: CheckBox) {
-        delegate?.distanceCell!(self, didChangeValue: checkBox.isChecked)
+    
+    func switchValueChanged(){
+        delegate?.distanceCell!(self, didChangeValue: distanceSwitch.on)
     }
     
 }

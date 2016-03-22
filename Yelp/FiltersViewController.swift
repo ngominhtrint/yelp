@@ -17,13 +17,20 @@ class FiltersViewController: UIViewController {
     weak var delegate: FiltersViewControllerDelegate?
     var searchData: Filter?
     
-    var categories: [[String:String]]!
     var switchStates = [Int:Bool]()
+    var distanceSwitchStates = [Int:Bool]()
+    var sortBySwitchStates = [Int:Bool]()
+    var categoriesSwitchStates = [Int:Bool]()
+    
+    let sortBy = [YelpSortMode.BestMatched, YelpSortMode.Distance, YelpSortMode.HighestRated]
+    let distances = [25, 0.3, 1, 3, 5]
+    let categories = ["homeandgarden", "flowers", "fashion"]
+    
     let data = [("", ["Offering a Deal"]),
         ("Distance", ["Auto", "0.3 miles", "1 miles", "3 miles", "5 miles"]),
         ("Sort By", ["Best Match", "Distance", "High Rated"]),
-        ("Category", ["Afghan", "African", "American (New)"])]
-    let FiltersCellIdentifier = "FiltersCell", DistanceCellIdentifier = "DistanceCell", HeaderViewIdentifier = "HeaderCell"
+        ("Category", ["Home & Garden", "Flowers & Gifts", "Fashion"])]
+    let FiltersCellIdentifier = "FiltersCell", DistanceCellIdentifier = "DistanceCell", HeaderViewIdentifier = "HeaderCell", SortByCellIdentifier = "SortByCell", CategoryCellIdentifier = "CategoryCell"
     
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
@@ -33,7 +40,7 @@ class FiltersViewController: UIViewController {
         tableView.registerClass(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: HeaderViewIdentifier)
         
         searchData = Filter()
-//        categories = yelpCategories()
+        searchData!.category = []
         // Do any additional setup after loading the view.
     }
 
@@ -52,35 +59,19 @@ class FiltersViewController: UIViewController {
     }
     
     @IBAction func onSearchClicked(sender: UIBarButtonItem) {
-        searchData!.distance = ""
-        searchData!.sortBy = YelpSortMode.BestMatched
-        searchData!.category = [""]
+        for (var index = 0; index < categoriesSwitchStates.count; index++){
+            if (categoriesSwitchStates[index] != nil && categoriesSwitchStates[index] == true){
+                searchData!.category.append(categories[index])
+            }
+        }
+
         delegate?.filterViewController!(self, didUpdateFilters: searchData!)
         dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func yelpCategories() -> [[String:String]]{
-        return [["name" : "Afghan", "code" : "afghani"],
-        ["name" : "American, New", "code" : "newamerican"],
-        ["name" : "American, Traditional", "code" : "tradamerican"],
-        ["name" : "Arabian", "code" : "arabian"],
-        ["name" : "Argentine", "code" : "argentine"],
-        ["name" : "Armenian", "code" : "armenian"],
-        ["name" : "Asian Fusion", "code" : "asian fusion"],
-        ["name" : "Asturian", "code" : "asturian"],
-        ["name" : "Australian", "code" : "australian"],
-        ["name" : "Autrian", "code" : "autrian"],
-        ["name" : "Baguettes", "code" : "baguettes"],
-        ["name" : "Bangladeshi", "code" : "bangladeshi"],
-        ["name" : "Bavarian", "code" : "bavarian"],
-        ["name" : "Beer Garden", "code" : "beergarden"],
-        ["name" : "Belgian", "code" : "belgian"],
-        ["name" : "Bistros", "code" : "bistros"]]
     }
 
 }
 
-extension FiltersViewController: UITableViewDelegate, UITableViewDataSource, FiltersCellDelegate {
+extension FiltersViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return data.count ?? 0
@@ -95,6 +86,7 @@ extension FiltersViewController: UITableViewDelegate, UITableViewDataSource, Fil
         switch (indexPath.section){
         case 0:
             let cell = tableView.dequeueReusableCellWithIdentifier(FiltersCellIdentifier, forIndexPath: indexPath) as! FiltersCell
+            cell.selectionStyle = .None
             cell.layer.borderWidth = 1.0
             cell.layer.borderColor = UIColor.grayColor().CGColor
             cell.layer.cornerRadius = 4.0
@@ -105,22 +97,42 @@ extension FiltersViewController: UITableViewDelegate, UITableViewDataSource, Fil
             cell.categoryLabel.text = dataInSections[indexPath.row]
             cell.offerDealSwitch.on = switchStates[indexPath.row] ?? false
             return cell
+        
         case 1:
             let cell = tableView.dequeueReusableCellWithIdentifier(DistanceCellIdentifier, forIndexPath: indexPath) as! DistanceCell
-            cell.layer.borderWidth = 1.0
-            cell.layer.borderColor = UIColor.grayColor().CGColor
-            cell.layer.cornerRadius = 4.0
+            drawCornerGrayBorder(cell)
+            cell.delegate = self
             
             let dataInSections = data[indexPath.section].1
             cell.distanceLabel.text = dataInSections[indexPath.row]
-            
+            cell.distanceSwitch.on = distanceSwitchStates[indexPath.row] ?? false
             return cell
+        
+        case 2:
+            let cell = tableView.dequeueReusableCellWithIdentifier(SortByCellIdentifier, forIndexPath: indexPath) as! SortByCell
+            drawCornerGrayBorder(cell)
+            
+            cell.delegate = self
+            
+            let dataInSections = data[indexPath.section].1
+            cell.sortByLabel.text = dataInSections[indexPath.row]
+            cell.sortBySwitch.on = sortBySwitchStates[indexPath.row] ?? false
+            return cell
+
+        case 3:
+            let cell = tableView.dequeueReusableCellWithIdentifier(CategoryCellIdentifier, forIndexPath: indexPath) as! CategoryCell
+            drawCornerGrayBorder(cell)
+            
+            cell.delegate = self
+            
+            let dataInSections = data[indexPath.section].1
+            cell.categoryLabel.text = dataInSections[indexPath.row]
+            cell.categorySwitch.on = categoriesSwitchStates[indexPath.row] ?? false
+            return cell
+            
         default:
             let cell = tableView.dequeueReusableCellWithIdentifier(FiltersCellIdentifier, forIndexPath: indexPath) as! FiltersCell
-            cell.layer.borderWidth = 1.0
-            cell.layer.borderColor = UIColor.grayColor().CGColor
-            cell.layer.cornerRadius = 4.0
-            
+            drawCornerGrayBorder(cell)
             cell.delegate = self
             
             let citiesInSection = data[indexPath.section].1
@@ -128,20 +140,11 @@ extension FiltersViewController: UITableViewDelegate, UITableViewDataSource, Fil
             cell.offerDealSwitch.on = switchStates[indexPath.row] ?? false
             return cell
         }
-        
-    }
-    
-    func filtersCell(filtersCell: FiltersCell, didChangeValue value: Bool) {
-        let indexPath = tableView.indexPathForCell(filtersCell)!
-        
-        switchStates[indexPath.row] = value
-        searchData?.offerDeal = switchStates[indexPath.row]
     }
     
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = tableView.dequeueReusableHeaderFooterViewWithIdentifier(HeaderViewIdentifier)! as UITableViewHeaderFooterView
         header.layer.backgroundColor = UIColor.whiteColor().CGColor
-        
         header.textLabel!.text = data[section].0
         return header
     }
@@ -152,8 +155,55 @@ extension FiltersViewController: UITableViewDelegate, UITableViewDataSource, Fil
         }
         return 50
     }
+    
+    func drawCornerGrayBorder(cell: UITableViewCell){
+        cell.selectionStyle = .None
+        cell.layer.borderWidth = 1.0
+        cell.layer.borderColor = UIColor.grayColor().CGColor
+        cell.layer.cornerRadius = 4.0
+    }
 }
 
+// FiltersCellDelegate
+extension FiltersViewController: FiltersCellDelegate{
+    func filtersCell(filtersCell: FiltersCell, didChangeValue value: Bool) {
+        let indexPath = tableView.indexPathForCell(filtersCell)!
+        
+        switchStates[indexPath.row] = value
+        searchData?.offerDeal = switchStates[indexPath.row]
+    }
+}
+
+// DistanceCellDelegate
+extension FiltersViewController: DistanceCellDelegate{
+    func distanceCell(distanceCell: DistanceCell, didChangeValue value: Bool) {
+        let indexPath = tableView.indexPathForCell(distanceCell)!
+        distanceSwitchStates[indexPath.row] = value
+        
+        if (distanceSwitchStates[indexPath.row] != nil && distanceSwitchStates[indexPath.row] == true){
+            searchData?.distance = distances[indexPath.row] * searchData!.mileToMeter
+        }
+    }
+}
+
+extension FiltersViewController: SortByCellDelegate{
+    func sortByCell(sortByCell: SortByCell, didChangeValue value: Bool) {
+        let indexPath = tableView.indexPathForCell(sortByCell)!
+        sortBySwitchStates[indexPath.row] = value
+        
+        if (sortBySwitchStates[indexPath.row] != nil && sortBySwitchStates[indexPath.row] == true){
+            searchData?.sortBy = sortBy[indexPath.row]
+        }
+    }
+}
+
+extension FiltersViewController: CategoryCellDelegate{
+    func categoryCell(categoryCell: CategoryCell, didValueChange value: Bool) {
+        let indexPath = tableView.indexPathForCell(categoryCell)!
+        categoriesSwitchStates[indexPath.row] = value
+    }
+    
+}
 
 
 

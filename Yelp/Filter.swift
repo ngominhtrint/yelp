@@ -10,14 +10,15 @@ import UIKit
 
 class Filter: NSObject {
 
+    let mileToMeter = 1609.3
     var offerDeal: Bool!
-    var distance: String!
+    var distance: Double!
     var sortBy: YelpSortMode!
     var category: [String]!
     
     override init() {
         offerDeal = false
-        distance = ""
+        distance = 25 * mileToMeter
         sortBy = YelpSortMode.BestMatched
         category = [""]
     }
